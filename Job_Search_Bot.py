@@ -1,42 +1,35 @@
-# job_search_bot.py
-
 import requests
 import csv
-from datetime import datetime
 
-# Define APIs to query
-APIS = {
-    "RemoteOK": "https://remoteok.com/api",
-}
+ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/23715689/u2kede0/"  # Replace with your actual Zap URL
 
-def fetch_remoteok():
+def fetch_remoteok_jobs():
     print("Fetching jobs from RemoteOK...")
     try:
-        response = requests.get(APIS["RemoteOK"])
-        jobs = response.json()[1:]  # skip metadata object
-        results = []
-        for job in jobs:
-            results.append({
-                "source": "RemoteOK",
-                "title": job.get("position"),
-                "company": job.get("company"),
-                "url": job.get("url"),
-                "tags": ", ".join(job.get("tags", [])),
-                "date_posted": job.get("date")
-            })
-        return results
-    except Exception as e:
-        print("Error fetching RemoteOK:", e)
-        return []
+        response = requests.get("https://remoteok.com/api")
+        jobs = response.json()[1:]  # Skip metadata
+        job_list = []
 
-def save_to_csv(jobs, filename="job_results.csv"):
-    print(f"Saving {len(jobs)} jobs to {filename}...")
-    with open(filename, mode="w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=["source", "title", "company", "url", "tags", "date_posted"])
-        writer.writeheader()
-        writer.writerows(jobs)
+        for job in jobs:
+            job_data = {
+                "job_title": job.get("position", ""),
+                "company_name": job.get("company", ""),
+                "job_url": job.get("url", ""),
+                "tags": ", ".join(job.get("tags", [])),
+                "location": job.get("location", ""),
+                "date_posted": job.get("date", "")
+            }
+
+            job_list.append(job_data)
+
+            # 🔥 Send to Zapier
+            requests.post(ZAPIER_WEBHOOK_URL, json=job_data)
+
+        print(f"Sent {len(job_list)} jobs to Google Sheets via Zapier.")
+
+    except Exception as e:
+        print("Error:", e)
 
 if __name__ == "__main__":
-    all_jobs = fetch_remoteok() 
-    save_to_csv(all_jobs)
-    print("Job scraping complete.")
+    fetch_remoteok_jobs()
+
