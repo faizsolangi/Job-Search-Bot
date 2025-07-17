@@ -7,7 +7,6 @@ from datetime import datetime
 # Define APIs to query
 APIS = {
     "RemoteOK": "https://remoteok.com/api",
-    "Remotive": "https://remotive.io/api/remote-jobs"
 }
 
 def fetch_remoteok():
@@ -28,26 +27,6 @@ def fetch_remoteok():
         return results
     except Exception as e:
         print("Error fetching RemoteOK:", e)
-        return []
-
-def fetch_remotive():
-    print("Fetching jobs from Remotive...")
-    try:
-        response = requests.get(APIS["Remotive"])
-        jobs = response.json()["jobs"]
-        results = []
-        for job in jobs:
-            results.append({
-                "source": "Remotive",
-                "title": job.get("title"),
-                "company": job.get("company_name"),
-                "url": job.get("url"),
-                "tags": job.get("category"),
-                "date_posted": job.get("publication_date")
-            })
-        return results
-    except Exception as e:
-        print("Error fetching Remotive:", e)
         return []
 
 def save_to_csv(jobs, filename="job_results.csv"):
