@@ -37,6 +37,6 @@ def save_to_csv(jobs, filename="job_results.csv"):
         writer.writerows(jobs)
 
 if __name__ == "__main__":
-    all_jobs = fetch_remoteok() + fetch_remotive()
+    all_jobs = fetch_remoteok() 
     save_to_csv(all_jobs)
     print("Job scraping complete.")
