@@ -1,6 +1,6 @@
 import requests
 
-ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/xxxxx/yyyyy"  # Replace with your Zapier URL
+ZAPIER_WEBHOOK_URL = "https://hooks.zapier.com/hooks/catch/23715689/u2kede0/"  # Replace with your Zapier URL
 
 # Define your keywords here
 KEYWORDS = ["agentic ai", "langchain", "python"]
