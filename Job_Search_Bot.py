@@ -15,7 +15,7 @@ def keyword_match(job):
 def is_recent(job_date_str):
     try:
         job_time = datetime.fromisoformat(job_date_str.replace("Z", "+00:00"))
-        return job_time >= datetime.utcnow() - timedelta(hours=2)
+        return job_time >= datetime.utcnow() - timedelta(hours=24)
     except:
         return False
 
